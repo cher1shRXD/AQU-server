@@ -7,6 +7,7 @@ import { GetUser } from './get-user.decorator';
 import { User } from './user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RefreshTokenDto } from './dto/refreshToken.dto';
+import { Board } from 'src/boards/board.entity';
 
 @Controller('auth')
 @ApiTags('AUTH')
@@ -30,8 +31,11 @@ export class AuthController {
 
   @Get('/me')
   @UseGuards(AuthGuard('jwt'))
-  async me(@GetUser() user: User) : Promise<User> {
-    return user;
+  async me(@GetUser() user: User) : Promise<{username:string,board:Board[]}> {
+    return {
+      username:user.username,
+      board:user.board
+    };
   }
 
   @Post('/refresh')

@@ -14,9 +14,10 @@ export class BoardsService {
 
   async getAllBoards(): Promise<Board[]> {
     return this.boardRepository.find({
-      relations: ['author'],
+      relations: ["author"],
+      select: ["id", "title", "url", "createdAt", "author"],
       order: {
-        id: 'DESC',
+        id: "DESC",
       },
     });
   }
@@ -40,7 +41,13 @@ export class BoardsService {
   async getBoardById(boardId: number): Promise<Board> {
     const res = await this.boardRepository.findOne({
       where: { id: boardId },
-      relations: ['author'],
+      relations: ["author"],
+      select: {
+        author: {
+          id: true,
+          username: true,
+        },
+      },
     });
     if (!res) {
       throw new NotFoundException(
