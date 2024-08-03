@@ -26,7 +26,7 @@ export class UploadController {
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     return {
-      url: `https://file-daesonamu.o-r.kr/${file.filename}`,
+      url: `https://file-aqu.o-r.kr/${file.filename}`,
     };
   }
 }
