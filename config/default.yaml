@@ -1,0 +1,17 @@
+server:
+  port: 3000
+
+db:
+  type: 'mysql'
+  port: 3306
+  database: 'aqu-database'
+  username: 'root'
+  host: 'localhost'
+  password: 'op1928!!'
+  synchronize: true
+
+jwt:
+  expiration: '3m'
+  secret: 'serverofdaesonamu'
+  refreshSecret: "refreshdaesonamu"
+  refreshExpiration: '50000000'
