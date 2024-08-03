@@ -3,12 +3,8 @@ import { IsString, Matches, MaxLength, MinLength } from "class-validator";
 
 export class SignupCredentialDto {
   @IsString()
-  @MinLength(4)
-  @MaxLength(4)
-  @ApiProperty({ type: String, description: 'student id' })
-  studentId: string;
-  @IsString()
-  @MinLength(4)
+  @MinLength(1)
+  @MaxLength(20)
   @ApiProperty({ type: String, description: 'username' })
   username: string;
   @IsString()

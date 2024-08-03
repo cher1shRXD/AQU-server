@@ -32,13 +32,13 @@ export class AuthService {
     @Inject('REDIS_CLIENT') private readonly redisClient: Redis,
   ) {}
 
-  private createRefreshToken(payload: { studentId: string }): string {
+  private createRefreshToken(payload: { username: string }): string {
     const refreshToken = this.jwtService.sign(payload, {
       expiresIn: jwtConfig.refreshExpiration,
       secret: jwtConfig.refreshSecret,
     });
     this.redisClient.set(
-      payload.studentId,
+      payload.username,
       refreshToken,
       'EX',
       jwtConfig.refreshExpiration,
@@ -53,8 +53,8 @@ export class AuthService {
   async login(
     loginCredentialDto: LoginCredentialDto,
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    const { studentId, password } = loginCredentialDto;
-    const user = await this.userRepository.findOne({ where: { studentId } });
+    const { username, password } = loginCredentialDto;
+    const user = await this.userRepository.findOne({ where: { username } });
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -64,7 +64,7 @@ export class AuthService {
       throw new UnauthorizedException('Wrong password');
     }
 
-    const payload = { studentId };
+    const payload = { username };
     const accessToken = this.jwtService.sign(payload, { expiresIn: jwtConfig.expiration });
     const refreshToken = this.createRefreshToken(payload);
 
@@ -77,16 +77,16 @@ export class AuthService {
     try {
       const payload = this.jwtService.verify(refreshToken.refreshToken, {
         secret: jwtConfig.refreshSecret,
-      }) as { studentId: string };
-      const { studentId } = payload;
+      }) as { username: string };
+      const { username } = payload;
 
-      const storedToken = await this.redisClient.get(studentId);
+      const storedToken = await this.redisClient.get(username);
 
       if (!storedToken || storedToken !== refreshToken.refreshToken) {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      const newPayload = { studentId };
+      const newPayload = { username };
       const accessToken = this.jwtService.sign(newPayload);
       const newRefreshToken = this.createRefreshToken(newPayload)
 

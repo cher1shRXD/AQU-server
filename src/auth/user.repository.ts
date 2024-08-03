@@ -15,13 +15,12 @@ export class UserRepository extends Repository<User> {
   }
 
   async createUser(signupCredentialDto: SignupCredentialDto): Promise<void> {
-    const { studentId, username, password } = signupCredentialDto;
+    const { username, password } = signupCredentialDto;
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = this.create({
-      studentId,
       username,
       password: hashedPassword,
     });
@@ -31,7 +30,7 @@ export class UserRepository extends Repository<User> {
     } catch (err) {
       console.log(err);
       if (err.code == 'ER_DUP_ENTRY') {
-        throw new ConflictException('Existing student id');
+        throw new ConflictException('Existing username');
       } else {
         throw new InternalServerErrorException();
       }

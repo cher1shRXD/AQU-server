@@ -24,10 +24,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { studentId: string }) {
-    const { studentId } = payload;
+  async validate(payload: { username: string }) {
+    const { username } = payload;
     const user: User = await this.userRepository.findOne({
-      where: { studentId },
+      where: { username },
     });
     if (!user) {
       throw new UnauthorizedException('wrong access token');
