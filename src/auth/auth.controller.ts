@@ -34,16 +34,16 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   async me(
     @GetUser() user: User
-  ): Promise<{ username: string; boards: Board[] }> {
+  ): Promise<{ username: string; board: Board[] }> {
     const userWithBoards = await User.findOne({
       where: { id: user.id },
-      relations: ["boards"],
+      relations: ["board"],
     });
 
     const plainUser = instanceToPlain(userWithBoards);
     return {
       username: plainUser["username"],
-      boards: plainUser["boards"],
+      board: plainUser["board"],
     };
   }
 
