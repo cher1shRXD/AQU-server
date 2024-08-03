@@ -13,7 +13,7 @@ export class User extends BaseEntity {
   @Column()
   password:string;
 
-  @OneToMany(type=> Board, board => board.author, { eager:true })
+  @OneToMany(type=> Board, board => board.author, { eager:false })
   board: Board[]
 
 }
