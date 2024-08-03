@@ -4,7 +4,7 @@ server:
 db:
   type: 'mysql'
   port: 3306
-  database: 'aqu-database'
+  database: 'aqu'
   username: 'root'
   host: 'localhost'
   password: 'op1928!!'
