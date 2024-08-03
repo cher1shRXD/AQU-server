@@ -8,37 +8,46 @@ import { User } from './user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RefreshTokenDto } from './dto/refreshToken.dto';
 import { Board } from 'src/boards/board.entity';
+import { instanceToPlain } from 'class-transformer';
 
-@Controller('auth')
-@ApiTags('AUTH')
-@ApiBearerAuth('access-token')
+@Controller("auth")
+@ApiTags("AUTH")
+@ApiBearerAuth("access-token")
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/signup')
+  @Post("/signup")
   async signUp(
-    @Body(ValidationPipe) signupCredentialDto: SignupCredentialDto,
+    @Body(ValidationPipe) signupCredentialDto: SignupCredentialDto
   ): Promise<void> {
     return this.authService.signUp(signupCredentialDto);
   }
 
-  @Post('/login')
+  @Post("/login")
   async login(
-    @Body(ValidationPipe) loginCredentialDto: LoginCredentialDto,
-  ): Promise<{ accessToken: string, refreshToken:string }> {
+    @Body(ValidationPipe) loginCredentialDto: LoginCredentialDto
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     return this.authService.login(loginCredentialDto);
   }
 
-  @Get('/me')
-  @UseGuards(AuthGuard('jwt'))
-  async me(@GetUser() user: User) : Promise<{username:string,board:Board[]}> {
+  @Get("/me")
+  @UseGuards(AuthGuard("jwt"))
+  async me(
+    @GetUser() user: User
+  ): Promise<{ username: string; boards: Board[] }> {
+    const userWithBoards = await User.findOne({
+      where: { id: user.id },
+      relations: ["boards"],
+    });
+
+    const plainUser = instanceToPlain(userWithBoards);
     return {
-      username:user.username,
-      board:user.board
+      username: plainUser["username"],
+      boards: plainUser["boards"],
     };
   }
 
-  @Post('/refresh')
+  @Post("/refresh")
   async refresh(@Body() refreshToken: RefreshTokenDto) {
     return this.authService.refreshAccessToken(refreshToken);
   }
