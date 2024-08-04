@@ -8,7 +8,7 @@ async function bootstrap() {
   const serverConfig: { port: number } = config.get('server');
   setupSwagger(app);
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: 'https://aqu-cloud.kro.kr',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: [
