@@ -15,7 +15,10 @@ export class User extends BaseEntity {
   @Exclude()
   password:string;
 
+  @Column()
+  role:"MEMBER"|"DEFAULT";
+
   @OneToMany(type=> Board, board => board.author, { eager:false })
-  board: Board[]
+  board: Board[];
 
 }

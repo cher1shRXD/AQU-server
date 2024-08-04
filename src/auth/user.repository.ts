@@ -23,6 +23,7 @@ export class UserRepository extends Repository<User> {
     const newUser = this.create({
       username,
       password: hashedPassword,
+      role:'DEFAULT'
     });
 
     try {

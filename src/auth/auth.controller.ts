@@ -34,7 +34,7 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   async me(
     @GetUser() user: User
-  ): Promise<{ username: string; board: Board[] }> {
+  ): Promise<{ username: string; role:'MEMBER'|'DEFAULT'; board: Board[] }> {
     const userWithBoards = await User.findOne({
       where: { id: user.id },
       relations: ["board"],
@@ -44,6 +44,7 @@ export class AuthController {
     return {
       username: plainUser["username"],
       board: plainUser["board"],
+      role: plainUser['role'],
     };
   }
 

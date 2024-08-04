@@ -35,12 +35,13 @@ export class BoardsService {
     createBoardDto: CreateBoardDto,
     user: User
   ): Promise<Board> {
-    const { title, url } = createBoardDto;
+    const { title, url, description } = createBoardDto;
     const createdAt = new Date().toLocaleDateString();
     const newContent = this.boardRepository.create({
       title,
       url,
       createdAt,
+      description,
       author: user,
     });
     return await this.boardRepository.save(newContent);

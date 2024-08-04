@@ -15,6 +15,9 @@ export class Board extends BaseEntity {
   @Column('longtext')
   url: string;
 
+  @Column('longtext')
+  description:string;
+
   @Column()
   createdAt: string;
 
