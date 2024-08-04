@@ -8,7 +8,7 @@ async function bootstrap() {
   const serverConfig: { port: number } = config.get('server');
   setupSwagger(app);
   app.enableCors({
-    origin: '*',
+    origin: 'localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: [
